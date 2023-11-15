@@ -1,0 +1,18 @@
+.NotFound {
+  h1 {
+    text-align: center;
+    font-size: 30px;
+
+    span {
+      font-size: 64px;
+    }
+  }
+
+  p {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  padding: 6rem;
+  max-width: 750px;
+}
