@@ -11,10 +11,20 @@ import { Sort } from './Components/Sort';
 export const Main = () => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [sortType, setSortType] = React.useState({
+    name: 'популярности',
+    sort: 'rating',
+  });
 
   React.useEffect(() => {
+    setIsLoading(true);
+
+    const category = categoryId > 0 ? `category=${categoryId}` : '';
     axios
-      .get('https://655330845449cfda0f2e4952.mockapi.io/items')
+      .get(
+        `https://655330845449cfda0f2e4952.mockapi.io/items?${category}&sortBy=${sortType.sort}&order=desc`,
+      )
       .then(response => {
         setItems(response.data);
         setIsLoading(false);
@@ -22,14 +32,15 @@ export const Main = () => {
       .catch(() => {
         console.log('Error');
       });
-  }, []);
+    window.scrollTo(0, 0);
+  }, [categoryId, sortType]);
 
   return (
     <div className="content">
       <div className="container">
         <div className="content__top">
-          <Category />
-          <Sort />
+          <Category value={categoryId} onClickCategory={setCategoryId} />
+          <Sort sortType={sortType} setSortType={setSortType} />
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
