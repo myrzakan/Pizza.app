@@ -2,6 +2,7 @@ import React from 'react';
 
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { SearchContext } from '../../App';
 import {
   setCategoryId,
@@ -10,12 +11,13 @@ import {
 import '../../scss/app.scss';
 import { Category } from './Components/Category';
 import Pagination from './Components/Pagination';
-import { PizzaBlock } from './Components/PizzaBlock';
+import PizzaBlock from './Components/PizzaBlock';
 import Skeleton from './Components/PizzaBlock/Skeleton';
 import { Sort } from './Components/Sort';
 
 export const Main = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { searchValue } = React.useContext(SearchContext);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
@@ -33,6 +35,19 @@ export const Main = () => {
     dispatch(setCurrentPage(number));
   };
 
+  // React.useEffect(() => {
+  //   if (window.location.search) {
+  //     const params = qs.parse(window.location.search.substring(1));
+  //     const sort = list.find(obj => obj.sortProperty === params.sortProperty);
+  //     dispatch(
+  //       setFilters({
+  //         ...params,
+  //         sort,
+  //       }),
+  //     );
+  //   }
+  // }, []);
+
   React.useEffect(() => {
     setIsLoading(true);
 
@@ -44,6 +59,7 @@ export const Main = () => {
       )
       .then(response => {
         setItems(response.data);
+        // console.log(response.data);
         setIsLoading(false);
       })
       .catch(() => {
@@ -52,15 +68,21 @@ export const Main = () => {
     window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue, currentPage]);
 
-  const pizzzas = items
-    // .filter(obj => {
-    //   if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
-    //     return true;
-    //   }
+  // React.useEffect(() => {
+  //   const queryString = qs.stringify({
+  //     sortProperty: sortType.sortProperty,
+  //     categoryId,
+  //     currentPage,
+  //   });
 
-    //   return false;
-    // })
-    .map(obj => <PizzaBlock key={obj.id} {...obj} />);
+  //   navigate(`?${queryString}`);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [categoryId, sortType, currentPage]);
+
+  const pizzzas = items.map(obj => {
+    // console.log(obj); // Вывод для отладки
+    return <PizzaBlock key={obj.id} {...obj} />;
+  });
 
   const skeletons = [...new Array(6)].map((_, index) => (
     <Skeleton key={index} />
