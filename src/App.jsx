@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Header } from './Components/Header/Header';
-import { Card } from './Pages/Card';
+import { Card } from './Pages/Main/Components/Card';
 import { Main } from './Pages/Main';
 import { NotFound } from './Pages/NotFound';
 import './scss/app.scss';
